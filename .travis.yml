@@ -37,14 +37,14 @@ matrix:
     dist: $LinDistro
     node_js: $NODEVER
     env: TEST_SCRIPT=microtime
-
+before_install:
+  # Cache is limited to 1GB, so forget about caching homebrew or temp directories.
+  # Do NOT attempt to skip dependency check, or it will fail.
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get install "gcc-$GCCVER" "g++-$GCCVER" nasm squashfs-tools; fi
 addons:
   apt:
     sources:
-        - ubuntu-toolchain-r-test
-    packages:
-        - squashfs-tools
-        - nasm
+      - ubuntu-toolchain-r-test
   homebrew:
     packages:
         - ruby@2.5
@@ -52,8 +52,8 @@ addons:
         - openssl
         - nasm
 install:
- - if [ "$TRAVIS_OS_NAME" = "osx" ]; then export PRJROOT_DIR="$OSXPRJDIR"; clang --version; fi
- - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get install "gcc-$GCCVER" "g++-$GCCVER"; export PRJROOT_DIR="$LINPRJDIR"; export CXX="g++-$GCCVER"; export CC="gcc-$GCCVER"; "gcc-$GCCVER" --version; "g++-$GCCVER" --version; fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then export PRJROOT_DIR="$OSXPRJDIR"; clang --version; fi
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then export PRJROOT_DIR="$LINPRJDIR"; export CXX="g++-$GCCVER" CC="gcc-$GCCVER"; "gcc-$GCCVER" --version; "g++-$GCCVER" --version; fi
   - mkdir -p $NODEC_TESTS_TMPDIR
   - git clone --depth 1 https://github.com/jashkenas/coffeescript.git
 before_script:
