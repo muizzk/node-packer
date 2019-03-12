@@ -74,6 +74,7 @@ before_script:
   - ruby --version
   - node --version
   - npm --version
+  - npm rebuild bcrypt --build-from-source
 
 script:
   - ruby tests/$TEST_SCRIPT || exit $?

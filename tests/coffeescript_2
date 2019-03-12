@@ -29,19 +29,17 @@ if ENV['PRJROOT_DIR'] && ENV['PRJROOT_DIR'].length > 0
 else
   raise "Please set ENV['PRJROOT_DIR']"
 end
-prjdir = ENV['PRJROOT_DIR']
 makedir = File.join(ENV['PRJROOT_DIR'], "node")
 
 # PART 2
 STDERR.puts "Testing coffeescript with node's official test cases"
-Dir.chdir(prjdir)
+Dir.chdir(makedir)
 ENV['ENCLOSE_IO_USE_ORIGINAL_NODE'] = '1'
 if Gem.win_platform?
   pid = spawn("call vcbuild.bat release test-simple ignore-flaky")
   pid, status = Process.wait2(pid)
   raise "Failed running call vcbuild.bat release test-simple ignore-flaky" unless status.success?
 else
-  Dir.chdir(makedir)
   ENV['FLAKY_TESTS'] = 'dontcare'
   pid = spawn("./configure && make test-simple")
   pid, status = Process.wait2(pid)
