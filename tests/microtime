@@ -69,5 +69,6 @@ end
 
 pid2 = spawn(outpath)
 pid2, status2 = Process.wait2(pid2)
-raise "Failed to produce output for microtime" unless pid2==0
+STDERR.puts "PID2: #{pid2} & Status2: #{status2}"
+raise "Failed to produce output for microtime" unless pid2==0?
 STDERR.puts "microtime Passed."
