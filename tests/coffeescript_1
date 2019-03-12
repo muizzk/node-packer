@@ -30,22 +30,21 @@ else
   raise "Please set ENV['NODEC_TESTS_TMPDIR']"
 end
 tmpdir = ENV['NODEC_TESTS_TMPDIR']
+arch = ENV['arch']
+mode = ENV['mode']
 
-unless Dir.exist?('coffeescript')
-  puts `git clone --depth 1 https://github.com/jashkenas/coffeescript.git`
-  raise 'git failed' unless $?.success?
-end
-Dir.chdir('coffeescript')
+#Set default project directory.
+prjdir = File.join(ENV['PRJROOT_DIR'])
+coffeeBIN = File.join(ENV['PRJROOT_DIR'], "coffeescript", "bin", "coffee")
 
-outpath = File.expand_path((Gem.win_platform? ? 'a.exe' : 'a.out'), Dir.pwd)
+outpath = File.expand_path((Gem.win_platform? ? 'a.exe' : 'a.out'), prjdir)
 FileUtils.rm_f(outpath)
+STDERR.puts "Will check for the generated file #{outpath}"
 
-tmpdir_node = File.join(tmpdir, "node-#{`ruby ../bin/nodec --node-version`.strip}-#{`ruby ../bin/nodec --version`.strip}")
-
-pid = spawn("ruby ../bin/nodec --tmpdir=#{escape tmpdir} bin/coffee")
+Dir.chdir(prjdir)
+pid = spawn("ruby bin/nodec --tmpdir=#{escape tmpdir} #{coffeeBIN}")
 pid, status = Process.wait2(pid)
 raise "Failed running nodec for coffeescript" unless status.success?
-
 raise unless File.exist?(outpath)
 raise unless File.size(outpath) >= 10_000_000
 
@@ -62,19 +61,3 @@ raise unless $?.success?
 raise unless 64 == `#{outpath} --eval "console.log(((x) -> x * x)(8))"`.to_i
 raise unless $?.success?
 STDERR.puts "coffeescript Passed."
-
-# PART 2
-STDERR.puts "Testing coffeescript with node's official test cases"
-Dir.chdir(tmpdir_node)
-ENV['ENCLOSE_IO_USE_ORIGINAL_NODE'] = '1'
-if Gem.win_platform?
-  pid = spawn("call vcbuild.bat release nosign noprojgen nobuild test-simple ignore-flaky ")
-  pid, status = Process.wait2(pid)
-  raise "Failed running call vcbuild.bat release nosign noprojgen nobuild test-simple ignore-flaky" unless status.success?
-else
-  ENV['FLAKY_TESTS'] = 'dontcare'
-  pid = spawn("make test-simple")
-  pid, status = Process.wait2(pid)
-  raise "Failed running make test-simple" unless status.success?
-end
-STDERR.puts "coffeescript with node's official test cases Passed"

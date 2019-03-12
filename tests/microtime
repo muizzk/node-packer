@@ -30,7 +30,8 @@ else
   raise "Please set ENV['NODEC_TESTS_TMPDIR']"
 end
 tmpdir = ENV['NODEC_TESTS_TMPDIR']
-tmpdir_node = File.join(tmpdir, 'node')
+prjdir = File.join(ENV['PRJROOT_DIR'])
+
 
 Dir.mkdir('microtime')
 Dir.chdir('microtime') do
@@ -49,7 +50,7 @@ Dir.chdir('microtime')
 outpath = File.expand_path((Gem.win_platform? ? 'a.exe' : 'a.out'), Dir.pwd)
 FileUtils.rm_f(outpath)
 
-pid = spawn("ruby ../bin/nodec --tmpdir=#{escape tmpdir} index.js")
+pid = spawn("ruby #{prjdir}/bin/nodec --tmpdir=#{escape tmpdir} index.js")
 pid, status = Process.wait2(pid)
 raise "Failed running nodec for microtime" unless status.success?
 
