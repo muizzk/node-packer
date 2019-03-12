@@ -52,14 +52,8 @@ addons:
         - openssl
         - nasm
 install:
- - if [ "$TRAVIS_OS_NAME" = "osx" ]; then \
-       export PRJROOT_DIR="$OSXPRJDIR"; clang --version; fi
- - if [ "$TRAVIS_OS_NAME" = "linux" ]; then \
-       sudo apt-get install "gcc-$GCCVER" "g++-$GCCVER"; \
-       export PRJROOT_DIR="$LINPRJDIR"; \
-       export CXX="g++-$GCCVER"; \
-       export CC="gcc-$GCCVER"; \
-       "gcc-$GCCVER" --version; "g++-$GCCVER" --version; fi
+ - if [ "$TRAVIS_OS_NAME" = "osx" ]; then export PRJROOT_DIR="$OSXPRJDIR"; clang --version; fi
+ - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get install "gcc-$GCCVER" "g++-$GCCVER"; export PRJROOT_DIR="$LINPRJDIR"; export CXX="g++-$GCCVER"; export CC="gcc-$GCCVER"; "gcc-$GCCVER" --version; "g++-$GCCVER" --version; fi
   - mkdir -p $NODEC_TESTS_TMPDIR
   - git clone --depth 1 https://github.com/jashkenas/coffeescript.git
 before_script:
@@ -69,12 +63,8 @@ before_script:
   - ruby --version
   - node --version
   - npm --version
-  - if [ "$TEST_SCRIPT" = "coffeescript_2" && "$TRAVIS_OS_NAME" = "osx" ]; then \
-        cd node && npm install microtime;\
-        export DYLD_LIBRARY_PATH="$PRJROOT_DIR/node/node_modules/microtime/prebuilds/darwin-x64;$DYLD_LIBRARY_PATH"; fi
-  - if [ "$TEST_SCRIPT" = "coffeescript_2" && "$TRAVIS_OS_NAME" = "linux" ]; then \
-        cd node && npm install microtime;\
-        export LD_LIBRARY_PATH="$PRJROOT_DIR/node/node_modules/microtime/prebuilds/linux-x64;$LD_LIBRARY_PATH"; fi
+  - if [ "$TEST_SCRIPT" = "coffeescript_2" && "$TRAVIS_OS_NAME" = "osx" ]; then cd node && npm install microtime; export DYLD_LIBRARY_PATH="$PRJROOT_DIR/node/node_modules/microtime/prebuilds/darwin-x64;$DYLD_LIBRARY_PATH"; fi
+  - if [ "$TEST_SCRIPT" = "coffeescript_2" && "$TRAVIS_OS_NAME" = "linux" ]; then cd node && npm install microtime; export LD_LIBRARY_PATH="$PRJROOT_DIR/node/node_modules/microtime/prebuilds/linux-x64;$LD_LIBRARY_PATH"; fi
 
     #LD_LIBRARY_PATH / DYLD_LIBRARY_PATH contains only darwin-x64, linux-arm, linux-x64 and win32
 
