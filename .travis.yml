@@ -74,8 +74,6 @@ before_script:
   - ruby --version
   - node --version
   - npm --version
-  # Fix microtime issue, source: https://itsfoss.com/solve-open-shared-object-file-quick-tip/
-  - sudo /sbin/ldconfig -v
 
 script:
   - ruby tests/$TEST_SCRIPT || exit $?

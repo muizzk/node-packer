@@ -16,7 +16,6 @@ environment:
     - TEST_SCRIPT: microtime
 cache:
   - node_modules
-  - ../../dependencies -> appveyor.yml
 
 build_script:
 - ps: |
@@ -26,29 +25,23 @@ build_script:
 
     mkdir $env:DEPEND_DIR
 
-    $depBin = Join-Path $env:DEPEND_DIR -ChildPath 'usr' | Join-Path -ChildPath 'bin'
-    if (Test-Path($depBin)) 
-    {
-        Write-Host 'Skipping Ruby as cache is present.' -ForegroundColor Yellow
-    } else{
-        Start-FileDownload https://raw.githubusercontent.com/slee047/node-packer/AppVeyorDeps/ruby.zip -FileName $env:DEPEND_DIR\ruby.zip
+    Start-FileDownload https://raw.githubusercontent.com/slee047/node-packer/AppVeyorDeps/ruby.zip -FileName $env:DEPEND_DIR\ruby.zip
 
-        Start-FileDownload https://github.com/pmq20/squashfuse/files/691217/sqfs43-win32.zip -FileName $env:DEPEND_DIR\sqfs43-win32.zip
+    Start-FileDownload https://github.com/pmq20/squashfuse/files/691217/sqfs43-win32.zip -FileName $env:DEPEND_DIR\sqfs43-win32.zip
 
-        Start-FileDownload https://nodejs.org/dist/v$env:NODEC_NODE/node-v$env:NODEC_NODE-win-$env:arch.zip -FileName $env:DEPEND_DIR\node.zip
+    Start-FileDownload https://nodejs.org/dist/v$env:NODEC_NODE/node-v$env:NODEC_NODE-win-$env:arch.zip -FileName $env:DEPEND_DIR\node.zip
 
-        Start-FileDownload https://raw.githubusercontent.com/slee047/node-packer/AppVeyorDeps/nasm.zip -FileName $env:DEPEND_DIR\nasm.zip
+    Start-FileDownload https://raw.githubusercontent.com/slee047/node-packer/AppVeyorDeps/nasm.zip -FileName $env:DEPEND_DIR\nasm.zip
 
-        Add-Type -AssemblyName System.IO.Compression.FileSystem
+    Add-Type -AssemblyName System.IO.Compression.FileSystem
 
-        [System.IO.Compression.ZipFile]::ExtractToDirectory("$env:DEPEND_DIR\ruby.zip", "$env:DEPEND_DIR")
+    [System.IO.Compression.ZipFile]::ExtractToDirectory("$env:DEPEND_DIR\ruby.zip", "$env:DEPEND_DIR")
 
-        [System.IO.Compression.ZipFile]::ExtractToDirectory("$env:DEPEND_DIR\sqfs43-win32.zip", "$env:DEPEND_DIR\usr\bin")
+    [System.IO.Compression.ZipFile]::ExtractToDirectory("$env:DEPEND_DIR\sqfs43-win32.zip", "$env:DEPEND_DIR\usr\bin")
 
-        [System.IO.Compression.ZipFile]::ExtractToDirectory("$env:DEPEND_DIR\node.zip", "$env:DEPEND_DIR\usr\bin")
+    [System.IO.Compression.ZipFile]::ExtractToDirectory("$env:DEPEND_DIR\node.zip", "$env:DEPEND_DIR\usr\bin")
 
-        [System.IO.Compression.ZipFile]::ExtractToDirectory("$env:DEPEND_DIR\nasm.zip", "$env:DEPEND_DIR")
-    }
+    [System.IO.Compression.ZipFile]::ExtractToDirectory("$env:DEPEND_DIR\nasm.zip", "$env:DEPEND_DIR")
 
 test_script:
 - cmd: |

@@ -31,10 +31,12 @@ else
 end
 tmpdir = ENV['NODEC_TESTS_TMPDIR']
 prjdir = File.join(ENV['PRJROOT_DIR'])
+microdir = File.join("#{prjdir}", "microtime")
+appFile = File.join("#{microdir}", "index.js")
 
 
-Dir.mkdir('microtime')
-Dir.chdir('microtime') do
+Dir.mkdir(microdir)
+Dir.chdir(microdir) do
   File.open('package.json', 'w') do |f|
     f.puts '{"dependencies":{"microtime":"latest"}}'
   end
@@ -45,15 +47,15 @@ Dir.chdir('microtime') do
     }
   end
 end
-Dir.chdir('microtime')
 
-outpath = File.expand_path((Gem.win_platform? ? 'a.exe' : 'a.out'), Dir.pwd)
+outpath = File.expand_path((Gem.win_platform? ? 'a.exe' : 'a.out'), prjdir)
 FileUtils.rm_f(outpath)
+STDERR.puts "Will check for the generated file #{outpath}"
 
-pid = spawn("ruby #{prjdir}/bin/nodec --tmpdir=#{escape tmpdir} index.js")
+Dir.chdir(prjdir)
+pid = spawn("ruby bin/nodec --tmpdir=#{escape tmpdir} #{appFile}")
 pid, status = Process.wait2(pid)
 raise "Failed running nodec for microtime" unless status.success?
-
 raise unless File.exist?(outpath)
 raise unless File.size(outpath) >= 10_000_000
 
