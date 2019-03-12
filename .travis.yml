@@ -57,7 +57,8 @@ install:
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; then \
        sudo apt-get install "gcc-$GCCVER" "g++-$GCCVER"; \
        export PRJROOT_DIR="$LINPRJDIR"; \
-       export CXX="g++-$GCCVER" CC="gcc-$GCCVER"; \
+       export CXX="g++-$GCCVER"; \
+       export CC="gcc-$GCCVER"; \
        "gcc-$GCCVER" --version; "g++-$GCCVER" --version; fi
   - mkdir -p $NODEC_TESTS_TMPDIR
   - git clone --depth 1 https://github.com/jashkenas/coffeescript.git
