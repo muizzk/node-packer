@@ -68,10 +68,6 @@ test_script:
 
     npm --version
 
-    echo %cd%
-
-    dir
-
     git clone --depth 1 https://github.com/jashkenas/coffeescript.git & exit 0
 
     ruby tests\%TEST_SCRIPT%
