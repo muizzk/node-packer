@@ -68,7 +68,7 @@ test_script:
 
     npm --version
 
-    cd node-packer
+    echo %cd%
 
     git clone --depth 1 https://github.com/jashkenas/coffeescript.git & exit 0
 
