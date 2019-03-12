@@ -43,7 +43,8 @@ Dir.chdir(microdir) do
   File.open('index.js', 'w') do |f|
     f.puts %q{
       var microtime = require('microtime');
-      console.log(microtime.now())
+      console.log(`Microtime: ${microtime.now()}`);
+      return process.exit(0);
     }
   end
 end
@@ -66,7 +67,7 @@ else
   outpath = escape(outpath)
 end
 
-microtime = `#{outpath}`.to_i
-raise unless $?.success?
-raise unless microtime > 1494821628147271
+pid2 = spawn(outpath)
+pid2, status2 = Process.wait2(pid2)
+raise "Failed to produce output for microtime" unless pid2==0
 STDERR.puts "microtime Passed."

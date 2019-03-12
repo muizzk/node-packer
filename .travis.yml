@@ -11,17 +11,12 @@ env:
         - NODEC_TESTS_TMPDIR=/tmp/nodec_tests_tmpdir
         - LINPRJDIR=/home/travis/build/slee047/node-packer
         - OSXPRJDIR=/Users/travis/build/slee047/node-packer
-        - OSXRUBYRVMDIR=/Users/travis/.rvm
 matrix:
   include:
   - os: osx
     osx_image: $xcodeVer
     node_js: $NODEVER
     env: TEST_SCRIPT=coffeescript_1
-    cache: 
-        npm: true
-        directories:
-            - $OSXRUBYRVMDIR
   - os: linux
     dist: $LinDistro
     node_js: $NODEVER
@@ -30,10 +25,6 @@ matrix:
     osx_image: $xcodeVer
     node_js: $NODEVER
     env: TEST_SCRIPT=coffeescript_2
-    cache: 
-        npm: true
-        directories:
-            - $OSXRUBYRVMDIR
   - os: linux
     dist: $LinDistro
     node_js: $NODEVER
@@ -42,32 +33,32 @@ matrix:
     osx_image: $xcodeVer
     node_js: $NODEVER
     env: TEST_SCRIPT=microtime
-    cache: 
-        npm: true
-        directories:
-            - $OSXRUBYRVMDIR
   - os: linux
     dist: $LinDistro
     node_js: $NODEVER
     env: TEST_SCRIPT=microtime
-before_install:
-  # Cache is limited to 1GB, so forget about caching homebrew or temp directories.
-  # Do NOT attempt to skip dependency check, or it will fail.
-  # The last command is a readline related workaround, source: https://gist.github.com/wbotelhos/46c37807c834ccb5bb406e426adfe347
-  - if \[ ${TRAVIS_OS_NAME} == "osx" \]; then brew install openssl nasm squashfs && sudo ln -sfn /usr/local/opt/readline/lib/libreadline.8.0.dylib /usr/local/opt/readline/lib/libreadline.7.dylib; fi
-  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get install "gcc-$GCCVER" "g++-$GCCVER" nasm squashfs-tools; fi
+
 addons:
   apt:
     sources:
-      - ubuntu-toolchain-r-test
+        - ubuntu-toolchain-r-test
+    packages:
+        - gcc-$GCCVER
+        - g++-$GCCVER
+        - squashfs-tools
+        - nasm
+  homebrew:
+    packages:
+        - ruby@2.5
+        - squashfs
+        - openssl
+        - nasm
 install:
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then export PRJROOT_DIR="$OSXPRJDIR"; clang --version; fi
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; then export PRJROOT_DIR="$LINPRJDIR"; export CXX="g++-$GCCVER" CC="gcc-$GCCVER"; "gcc-$GCCVER" --version; "g++-$GCCVER" --version; fi
   - mkdir -p $NODEC_TESTS_TMPDIR
   - git clone --depth 1 https://github.com/jashkenas/coffeescript.git
 before_script:
-  - rvm install ruby-$RUBYVER
-  - rvm use ruby-$RUBYVER
   - python --version
   - nasm -v
   - mksquashfs -version
