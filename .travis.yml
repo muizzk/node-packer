@@ -58,7 +58,7 @@ install:
   - git clone --depth 1 https://github.com/jashkenas/coffeescript.git
   - wget "https://cache.ruby-lang.org/pub/ruby/$RubyMajMinVer/ruby-$RubyMajMinVer.$RubyRevVer.tar.gz"
   - tar -xvf "ruby-$RubyMajMinVer.$RubyRevVer.tar.gz"
-  - cd "$RubyMajMinVer.$RubyRevVer.tar.gz"
+  - cd "ruby-$RubyMajMinVer.$RubyRevVer"
   - ./configure
   - make
   - sudo make install
