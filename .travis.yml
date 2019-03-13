@@ -62,6 +62,7 @@ install:
   - ./configure
   - make
   - sudo make install
+  - cd $PRJROOT_DIR
 before_script:
   - python --version
   - nasm -v
