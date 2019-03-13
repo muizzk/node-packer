@@ -7,7 +7,7 @@
 # This file is part of Node.js Compiler, distributed under the MIT License
 # For full terms see the included LICENSE file
 
-STDERR.puts "Testing microtime"
+STDERR.puts "Testing date-time"
 
 require 'shellwords'
 require 'fileutils'
@@ -31,20 +31,19 @@ else
 end
 tmpdir = ENV['NODEC_TESTS_TMPDIR']
 prjdir = File.join(ENV['PRJROOT_DIR'])
-microdir = File.join("#{prjdir}", "microtime")
-appFile = File.join("#{microdir}", "index.js")
+datetimeDir = File.join("#{prjdir}", "datetime")
+appFile = File.join("#{datetimeDir}", "index.js")
 
 
-Dir.mkdir(microdir)
-Dir.chdir(microdir) do
+Dir.mkdir(datetimeDir)
+Dir.chdir(datetimeDir) do
   File.open('package.json', 'w') do |f|
-    f.puts '{"dependencies":{"microtime":"latest"}}'
+    f.puts '{"dependencies":{"date-time":"latest"}}'
   end
   File.open('index.js', 'w') do |f|
     f.puts %q{
-      var microtime = require('microtime');
-      console.log(`Microtime: ${microtime.now()}`);
-      return process.exit(0);
+      const dt = require('date-time');
+      console.log(`Current Date & Time: ${dt()}`);
     }
   end
 end
@@ -67,8 +66,7 @@ else
   outpath = escape(outpath)
 end
 
-#pid2 = spawn(outpath)
-#pid2, status2 = Process.wait2(pid2)
-#STDERR.puts "PID2: #{pid2} & Status2: #{status2}"
-#raise "Failed to produce output for microtime" unless pid2 == 0
+pid2 = spawn(outpath)
+pid2, status2 = Process.wait2(pid2)
+raise "Failed to produce output for microtime" unless status2.success?
 STDERR.puts "microtime Passed."
