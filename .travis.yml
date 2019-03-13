@@ -21,14 +21,14 @@ matrix:
     dist: $LinDistro
     node_js: $NODEVER
     env: TEST_SCRIPT=coffeescript_1
-  - os: osx
-    osx_image: $xcodeVer
-    node_js: $NODEVER
-    env: TEST_SCRIPT=coffeescript_2
-  - os: linux
-    dist: $LinDistro
-    node_js: $NODEVER
-    env: TEST_SCRIPT=coffeescript_2
+  #- os: osx
+  #  osx_image: $xcodeVer
+  #  node_js: $NODEVER
+  #  env: TEST_SCRIPT=coffeescript_2
+  #- os: linux
+  #  dist: $LinDistro
+  #  node_js: $NODEVER
+  #  env: TEST_SCRIPT=coffeescript_2
   - os: osx
     osx_image: $xcodeVer
     node_js: $NODEVER
