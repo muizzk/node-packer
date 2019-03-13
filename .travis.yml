@@ -22,14 +22,14 @@ matrix:
     dist: $LinDistro
     node_js: $NODEVER
     env: TEST_SCRIPT=coffeescript_1
-  #- os: osx
-  #  osx_image: $xcodeVer
-  #  node_js: $NODEVER
-  #  env: TEST_SCRIPT=coffeescript_2
-  #- os: linux
-  #  dist: $LinDistro
-  #  node_js: $NODEVER
-  #  env: TEST_SCRIPT=coffeescript_2
+  - os: osx
+    osx_image: $xcodeVer
+    node_js: $NODEVER
+    env: TEST_SCRIPT=coffeescript_2
+  - os: linux
+    dist: $LinDistro
+    node_js: $NODEVER
+    env: TEST_SCRIPT=coffeescript_2
   - os: osx
     osx_image: $xcodeVer
     node_js: $NODEVER
@@ -57,7 +57,7 @@ install:
   - mkdir -p $NODEC_TESTS_TMPDIR
   - git clone --depth 1 https://github.com/jashkenas/coffeescript.git
   - wget "https://cache.ruby-lang.org/pub/ruby/$RubyMajMinVer/ruby-$RubyMajMinVer.$RubyRevVer.tar.gz"
-  - tar -xvf "ruby-$RubyMajMinVer.$RubyRevVer.tar.gz"
+  - tar -xf "ruby-$RubyMajMinVer.$RubyRevVer.tar.gz"
   - cd "ruby-$RubyMajMinVer.$RubyRevVer"
   - ./configure
   - make
